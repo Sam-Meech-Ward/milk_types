@@ -16,10 +16,21 @@ public class MilksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Milk>>> GetMilkItems()
+    public async Task<ActionResult<IEnumerable<Milk>>> GetMilkItems(int? starRating)
     {
+        if (starRating.HasValue) {
+            return await _context.Milks.Where(t => t.Rating >= starRating).ToListAsync();
+        }
         return await _context.Milks.ToListAsync();
     }
+
+    // [HttpGet("complete")]
+    // public async Task<ActionResult<IEnumerable<Milk>>> GetCompletedTodoItems()
+    // {
+    //     // get the star rating query param
+    //     var starRating = Request.Query["starRating"];
+    //     return await _context.Milks.Where(t => t.Completed).ToListAsync();
+    // }
     
     [HttpGet("{id}")]
     public async Task<ActionResult<Milk>> GetMilkItem(int id)
